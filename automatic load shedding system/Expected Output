@@ -1,0 +1,58 @@
+================================================
+       AUTOMATIC LOAD SHEDDING SYSTEM
+================================================
+
+TEST CASE 1
+Available Power = 100 kW
+Critical Load = 30 kW
+Important Load = 30 kW
+Non-Critical Load = 20 kW
+
+Critical Enable = 1
+Important Enable = 1
+Non-Critical Enable = 1
+
+Shed Critical = 0
+Shed Important = 0
+Shed Non-Critical = 0
+
+
+TEST CASE 2
+Available Power = 65 kW
+
+Critical Enable = 1
+Important Enable = 1
+Non-Critical Enable = 0
+
+Shed Critical = 0
+Shed Important = 0
+Shed Non-Critical = 1
+
+
+TEST CASE 3
+Available Power = 35 kW
+
+Critical Enable = 1
+Important Enable = 0
+Non-Critical Enable = 0
+
+Shed Critical = 0
+Shed Important = 1
+Shed Non-Critical = 1
+
+
+TEST CASE 4
+Available Power = 20 kW
+
+Critical Enable = 0
+Important Enable = 0
+Non-Critical Enable = 0
+
+Shed Critical = 1
+Shed Important = 1
+Shed Non-Critical = 1
+
+
+================================================
+Simulation Completed Successfully
+================================================

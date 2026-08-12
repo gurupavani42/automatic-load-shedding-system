@@ -1,0 +1,138 @@
+`timescale 1ns/1ps
+
+module tb_automatic_load_shedding;
+
+    reg [15:0] available_power;
+
+    reg [15:0] critical_load;
+    reg [15:0] important_load;
+    reg [15:0] noncritical_load;
+
+    wire critical_enable;
+    wire important_enable;
+    wire noncritical_enable;
+
+    wire shed_critical;
+    wire shed_important;
+    wire shed_noncritical;
+
+
+    automatic_load_shedding DUT (
+
+        .available_power(available_power),
+
+        .critical_load(critical_load),
+        .important_load(important_load),
+        .noncritical_load(noncritical_load),
+
+        .critical_enable(critical_enable),
+        .important_enable(important_enable),
+        .noncritical_enable(noncritical_enable),
+
+        .shed_critical(shed_critical),
+        .shed_important(shed_important),
+        .shed_noncritical(shed_noncritical)
+
+    );
+
+
+    initial begin
+
+        $display("================================================");
+        $display("       AUTOMATIC LOAD SHEDDING SYSTEM");
+        $display("================================================");
+
+
+        // TEST CASE 1
+        // Enough power for all loads
+
+        available_power = 100;
+        critical_load = 30;
+        important_load = 30;
+        noncritical_load = 20;
+
+        #10;
+
+        $display("\nTEST CASE 1");
+        $display("Available Power = %d kW", available_power);
+        $display("Critical Load = %d kW", critical_load);
+        $display("Important Load = %d kW", important_load);
+        $display("Non-Critical Load = %d kW", noncritical_load);
+
+        $display("Critical Enable = %b", critical_enable);
+        $display("Important Enable = %b", important_enable);
+        $display("Non-Critical Enable = %b", noncritical_enable);
+
+        $display("Shed Critical = %b", shed_critical);
+        $display("Shed Important = %b", shed_important);
+        $display("Shed Non-Critical = %b", shed_noncritical);
+
+
+        // TEST CASE 2
+        // Shed non-critical load
+
+        available_power = 65;
+
+        #10;
+
+        $display("\nTEST CASE 2");
+        $display("Available Power = %d kW", available_power);
+
+        $display("Critical Enable = %b", critical_enable);
+        $display("Important Enable = %b", important_enable);
+        $display("Non-Critical Enable = %b", noncritical_enable);
+
+        $display("Shed Critical = %b", shed_critical);
+        $display("Shed Important = %b", shed_important);
+        $display("Shed Non-Critical = %b", shed_noncritical);
+
+
+        // TEST CASE 3
+        // Shed non-critical and important loads
+
+        available_power = 35;
+
+        #10;
+
+        $display("\nTEST CASE 3");
+        $display("Available Power = %d kW", available_power);
+
+        $display("Critical Enable = %b", critical_enable);
+        $display("Important Enable = %b", important_enable);
+        $display("Non-Critical Enable = %b", noncritical_enable);
+
+        $display("Shed Critical = %b", shed_critical);
+        $display("Shed Important = %b", shed_important);
+        $display("Shed Non-Critical = %b", shed_noncritical);
+
+
+        // TEST CASE 4
+        // Critical load also has to be shed
+
+        available_power = 20;
+
+        #10;
+
+        $display("\nTEST CASE 4");
+        $display("Available Power = %d kW", available_power);
+
+        $display("Critical Enable = %b", critical_enable);
+        $display("Important Enable = %b", important_enable);
+        $display("Non-Critical Enable = %b", noncritical_enable);
+
+        $display("Shed Critical = %b", shed_critical);
+        $display("Shed Important = %b", shed_important);
+        $display("Shed Non-Critical = %b", shed_noncritical);
+
+
+        #10;
+
+        $display("\n================================================");
+        $display("Simulation Completed Successfully");
+        $display("================================================");
+
+        $finish;
+
+    end
+
+endmodule

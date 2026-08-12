@@ -1,0 +1,105 @@
+
+---
+
+# 3. Verilog RTL Code
+
+Create:
+
+`rtl/automatic_load_shedding.v`
+
+```verilog
+module automatic_load_shedding (
+
+    input  [15:0] available_power,
+    input  [15:0] critical_load,
+    input  [15:0] important_load,
+    input  [15:0] noncritical_load,
+
+    output reg critical_enable,
+    output reg important_enable,
+    output reg noncritical_enable,
+
+    output reg shed_critical,
+    output reg shed_important,
+    output reg shed_noncritical
+
+);
+
+    reg [16:0] total_load;
+
+    always @(*) begin
+
+        total_load =
+            critical_load +
+            important_load +
+            noncritical_load;
+
+        // Default: all loads connected
+
+        critical_enable = 1'b1;
+        important_enable = 1'b1;
+        noncritical_enable = 1'b1;
+
+        shed_critical = 1'b0;
+        shed_important = 1'b0;
+        shed_noncritical = 1'b0;
+
+        // Condition 1:
+        // Sufficient power for all loads
+
+        if (available_power >= total_load) begin
+
+            critical_enable = 1'b1;
+            important_enable = 1'b1;
+            noncritical_enable = 1'b1;
+
+        end
+
+        // Condition 2:
+        // Shed non-critical load
+
+        else if (available_power >=
+                 (critical_load + important_load)) begin
+
+            critical_enable = 1'b1;
+            important_enable = 1'b1;
+
+            noncritical_enable = 1'b0;
+
+            shed_noncritical = 1'b1;
+
+        end
+
+        // Condition 3:
+        // Shed non-critical and important loads
+
+        else if (available_power >= critical_load) begin
+
+            critical_enable = 1'b1;
+
+            important_enable = 1'b0;
+            noncritical_enable = 1'b0;
+
+            shed_important = 1'b1;
+            shed_noncritical = 1'b1;
+
+        end
+
+        // Condition 4:
+        // Even critical load cannot be fully supplied
+
+        else begin
+
+            critical_enable = 1'b0;
+            important_enable = 1'b0;
+            noncritical_enable = 1'b0;
+
+            shed_critical = 1'b1;
+            shed_important = 1'b1;
+            shed_noncritical = 1'b1;
+
+        end
+
+    end
+
+endmodule
